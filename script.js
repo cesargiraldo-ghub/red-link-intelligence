@@ -530,7 +530,9 @@ function maskSecret(value) {
 }
 
 function normalizeWebhookBase(value) {
-  const cleanValue = (value || "https://red-link-intelligence.vercel.app/api/webhook").replace(/\/+$/g, "");
+  const cleanValue = (value || "https://red-link-intelligence.vercel.app/api/webhook")
+    .replace("https://red-link-intelligence.com", "https://red-link-intelligence.vercel.app")
+    .replace(/\/+$/g, "");
   if (cleanValue.endsWith("/api/webhook")) return cleanValue;
   if (cleanValue.endsWith("/webhook")) return cleanValue.replace(/\/webhook$/, "/api/webhook");
   return `${cleanValue}/api/webhook`;
