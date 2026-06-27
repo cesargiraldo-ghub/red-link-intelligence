@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RED Link Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <aside class="sidebar" aria-label="Panel de control">
+          <div class="brand">
+            <div class="brand-mark">R</div>
+            <div>
+              <h1>RED Link Intelligence</h1>
+              <p>Extractor universal de links inmobiliarios</p>
+            </div>
+          </div>
+
+          <div class="status-panel">
+            <div class="status-row">
+              <span class="status-dot"></span>
+              <span>Modo webhook listo</span>
+            </div>
+            <p>Convierte mensajes de WhatsApp en datos útiles para RED HUB, CRM o GoHighLevel.</p>
+          </div>
+
+          <nav class="portal-list" aria-label="Portales soportados">
+            <span>Portales</span>
+            <button class="portal-chip active" type="button">Metrocuadrado</button>
+            <button class="portal-chip" type="button">FincaRaíz</button>
+            <button class="portal-chip" type="button">Properstar</button>
+            <button class="portal-chip" type="button">Mercado Libre</button>
+            <button class="portal-chip" type="button">Ciencuadras</button>
+            <button class="portal-chip" type="button">Clasificados El País</button>
+            <button class="portal-chip" type="button">Espacio Urbano</button>
+            <button class="portal-chip" type="button">Portal propio RED</button>
+          </nav>
+        </aside>
+
+        <section class="main-panel">
+          <header class="topbar">
+            <div>
+              <p class="eyebrow">Comprensión de enlaces inmobiliarios</p>
+              <h2>Identifica el inmueble detras de un mensaje</h2>
+            </div>
+            <button class="icon-button" id="copyJsonBtn" type="button" title="Copiar JSON" aria-label="Copiar JSON">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="analysis-grid">
+            <section class="input-panel tool-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Mensaje entrante</h3>
+                  <p>Pega aqui el texto completo que llega desde WhatsApp o GHL.</p>
+                </div>
+                <button id="sampleBtn" class="text-button" type="button">Cargar ejemplo</button>
+              </div>
+              <textarea id="messageInput" spellcheck="false" aria-label="Mensaje entrante"></textarea>
+              <div class="button-row">
+                <button id="analyzeBtn" class="primary-button" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.3-4.3"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                  Analizar link
+                </button>
+                <button id="clearBtn" class="secondary-button" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14H6L5 6"></path></svg>
+                  Limpiar
+                </button>
+              </div>
+            </section>
+
+            <section class="summary-panel tool-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Ficha detectada</h3>
+                  <p>Resumen operativo para el asesor o agente IA.</p>
+                </div>
+                <span id="confidenceBadge" class="confidence-badge">Sin analizar</span>
+              </div>
+
+              <div class="property-visual">
+                <div class="visual-overlay">
+                  <span id="portalLabel">Portal</span>
+                  <strong id="intentLabel">Pendiente</strong>
+                </div>
+              </div>
+
+              <dl class="facts-grid">
+                <div><dt>Negocio</dt><dd id="businessValue">-</dd></div>
+                <div><dt>Tipo</dt><dd id="propertyTypeValue">-</dd></div>
+                <div><dt>Ciudad</dt><dd id="cityValue">-</dd></div>
+                <div><dt>Barrio/Zona</dt><dd id="neighborhoodValue">-</dd></div>
+                <div><dt>Habitaciones</dt><dd id="roomsValue">-</dd></div>
+                <div><dt>Baños</dt><dd id="bathsValue">-</dd></div>
+                <div><dt>Garajes</dt><dd id="parkingValue">-</dd></div>
+                <div><dt>Codigo</dt><dd id="codeValue">-</dd></div>
+                <div><dt>Codigo adicional</dt><dd id="altCodeValue">-</dd></div>
+                <div><dt>Dominio</dt><dd id="domainValue">-</dd></div>
+              </dl>
+            </section>
+          </div>
+
+          <section class="bottom-grid">
+            <div class="tool-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>JSON para RED HUB</h3>
+                  <p>Campos estandarizados para guardar en el contacto o enviar a otro workflow.</p>
+                </div>
+              </div>
+              <pre id="jsonOutput" class="code-output">{}</pre>
+            </div>
+
+            <div class="tool-panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Respuesta sugerida</h3>
+                  <p>Texto listo para automatizacion inicial por WhatsApp.</p>
+                </div>
+              </div>
+              <div id="replyOutput" class="reply-box">Analiza un mensaje para generar una respuesta.</div>
+            </div>
+          </section>
+
+          <section class="admin-section tool-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Admin multiempresa</h3>
+                <p>Registra cada inmobiliaria y genera su enlace webhook para conectar GoHighLevel con CRM RED.</p>
+              </div>
+            </div>
+
+            <div class="admin-grid">
+              <form id="companyForm" class="company-form">
+                <label>
+                  Empresa
+                  <input id="companyNameInput" type="text" placeholder="RED Inmobiliaria Cali" autocomplete="organization" />
+                </label>
+                <label>
+                  Correo CRM RED
+                  <input id="crmEmailInput" type="email" placeholder="admin@empresa.com" autocomplete="email" />
+                </label>
+                <label>
+                  API Key CRM RED
+                  <input id="crmApiKeyInput" type="password" placeholder="X-Api-Key" autocomplete="off" />
+                </label>
+                <label>
+                  API Secret CRM RED
+                  <input id="crmApiSecretInput" type="password" placeholder="X-Api-Secret" autocomplete="off" />
+                </label>
+                <label>
+                  Base pública del webhook
+                  <input id="webhookBaseInput" type="url" placeholder="https://red-link-intelligence.com/webhook" />
+                </label>
+                <button class="primary-button" type="submit">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+                  Crear enlace
+                </button>
+              </form>
+
+              <div class="webhook-panel">
+                <h4>Webhook para GoHighLevel</h4>
+                <p>Usa método POST, envía el mensaje en <strong>message</strong> y usa <strong>respuesta_whatsapp</strong> para responder al cliente.</p>
+                <pre id="webhookOutput" class="code-output compact-code">{}</pre>
+              </div>
+            </div>
+
+            <div id="companyList" class="company-list" aria-label="Empresas configuradas"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite">Copiado</div>
+    <script src="./script.js"></script>
+  </body>
+</html>
