@@ -29,6 +29,12 @@ O por empresa:
 https://TU-PROYECTO.vercel.app/api/webhook/empresa-token
 ```
 
+Ejemplo actual:
+
+```text
+https://red-link-intelligence.vercel.app/api/webhook/emporio-bienes-capitales-m2n49
+```
+
 Metodo: `POST`
 
 Body recomendado:
