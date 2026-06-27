@@ -1,7 +1,31 @@
 const { analyzeMessage } = require("../_parser");
 
+function findTextWithUrl(value) {
+  if (value == null) return "";
+  if (typeof value === "string") return /(?:https?:\/\/|www\.)/i.test(value) ? value : "";
+  if (typeof value !== "object") return "";
+
+  for (const item of Object.values(value)) {
+    const found = findTextWithUrl(item);
+    if (found) return found;
+  }
+
+  return "";
+}
+
 function readMessage(body = {}) {
-  return body.message || body.body || body.text || body.mensaje_whatsapp || body.message_body || "";
+  return (
+    body.message ||
+    body.body ||
+    body.text ||
+    body.mensaje_whatsapp ||
+    body.message_body ||
+    body.messageBody ||
+    body.MessageBody ||
+    body["Message Body"] ||
+    findTextWithUrl(body) ||
+    ""
+  );
 }
 
 module.exports = function handler(req, res) {
@@ -32,6 +56,7 @@ module.exports = function handler(req, res) {
   return res.status(200).json({
     ok: !analysis.error,
     tenant,
+    mensaje_recibido: message,
     ...analysis,
   });
 };
