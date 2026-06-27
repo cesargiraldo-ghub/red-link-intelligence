@@ -14,18 +14,24 @@ function findTextWithUrl(value) {
 }
 
 function readMessage(body = {}) {
-  return (
-    body.message ||
-    body.body ||
-    body.text ||
-    body.mensaje_whatsapp ||
-    body.message_body ||
-    body.messageBody ||
-    body.MessageBody ||
-    body["Message Body"] ||
-    findTextWithUrl(body) ||
-    ""
-  );
+  const candidates = [
+    body.message,
+    body.body,
+    body.text,
+    body.mensaje_whatsapp,
+    body.message_body,
+    body.messageBody,
+    body.MessageBody,
+    body["Message Body"],
+  ];
+
+  for (const candidate of candidates) {
+    if (typeof candidate === "string" && candidate.trim()) return candidate;
+    const nestedText = findTextWithUrl(candidate);
+    if (nestedText) return nestedText;
+  }
+
+  return findTextWithUrl(body) || "";
 }
 
 module.exports = function handler(req, res) {
